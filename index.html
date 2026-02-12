@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreX Fitness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden
+        }
+
+        section {
+            padding: 100px 20px;
+            text-align: center
+        }
+
+        .hero {
+            background: linear-gradient(to bottom, #000, #0a0a0a, #000)
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1
+        }
+
+        .hero span {
+            color: #00ff88
+        }
+
+        .hero p {
+            max-width: 800px;
+            margin: 30px auto;
+            font-size: 1.2rem;
+            color: #aaa
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 18px 40px;
+            border-radius: 50px;
+            background: #00ff88;
+            color: #000;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .3s
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #00ff88
+        }
+
+        .logo {
+            width: 160px;
+            margin-bottom: 40px
+        }
+
+        .features {
+            background: #050505
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto
+        }
+
+        .card {
+            background: #0d0d0d;
+            border: 1px solid #1a1a1a;
+            border-radius: 20px;
+            padding: 40px;
+            transition: .4s
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 25px rgba(0, 255, 136, .3)
+        }
+
+        .card h3 {
+            margin: 20px 0;
+            font-size: 1.4rem
+        }
+
+        .stats {
+            background: #000
+        }
+
+        .stat {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #00ff88
+        }
+
+        .cta {
+            background: linear-gradient(to top, rgba(0, 255, 136, .1), #000)
+        }
+
+        footer {
+            padding: 40px;
+            background: #000;
+            border-top: 1px solid #111;
+            color: #666;
+            font-size: .9rem
+        }
+
+        .fade {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: 1s
+        }
+
+        .fade.visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <img src="Fitness Logo.png" class="logo" alt="CoreX Fitness Logo">
+        <h1>O FUTURO DO <span>FITNESS</span> COMEÇA AGORA</h1>
+        <p>Dietas inteligentes, treinos personalizados por IA e análise de alimentos por foto. Transforme seu corpo com
+            tecnologia que pensa por você.</p>
+        <a href="https://cocky-corex-fit.base44.app" target="_blank" rel="noopener noreferrer" class="btn">VISITE O SITE
+            AGORA</a>
+    </section>
+
+    <section class="features">
+        <h2 style="font-size:2.5rem;margin-bottom:60px">Tecnologia que Trabalha por Você</h2>
+        <div class="grid">
+            <div class="card fade">
+                <h3>Treino Personalizado por IA</h3>
+                <p>A inteligência artificial cria treinos adaptados ao seu corpo, meta e evolução diária.</p>
+            </div>
+            <div class="card fade">
+                <h3>Foto → Calorias</h3>
+                <p>Tire uma foto do alimento e descubra calorias, proteínas, gorduras e macros instantaneamente.</p>
+            </div>
+            <div class="card fade">
+                <h3>Dieta Inteligente</h3>
+                <p>Plano alimentar que evolui conforme seu progresso e objetivos.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <h2 style="font-size:2.5rem;margin-bottom:60px">Resultados Reais</h2>
+        <div class="grid">
+            <div class="fade">
+                <div class="stat">+87%</div>
+                <p>Usuários atingem suas metas</p>
+            </div>
+            <div class="fade">
+                <div class="stat">+3x</div>
+                <p>Mais consistência nos treinos</p>
+            </div>
+            <div class="fade">
+                <div class="stat">24h</div>
+                <p>IA ativa monitorando sua evolução</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2 style="font-size:3rem;margin-bottom:30px">Seu Corpo. Sua Evolução. Sua IA.</h2>
+        <p style="max-width:700px;margin:0 auto 40px;color:#aaa">Chega de contar calorias manualmente. Chega de treinos
+            genéricos. Experimente o nível máximo de performance.</p>
+        <a href="https://cocky-corex-fit.base44.app" target="_blank" rel="noopener noreferrer" class="btn">COMEÇAR
+            AGORA</a>
+    </section>
+
+    <footer>
+        © 2026 CoreX Fitness — Inteligência Artificial aplicada à performance humana.
+    </footer>
+
+    <script>
+        const faders = document.querySelectorAll('.fade');
+        const appearOptions = { threshold: 0.2 };
+        const appearOnScroll = new IntersectionObserver(function (entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                appearOnScroll.unobserve(entry.target);
+            });
+        }, appearOptions);
+        faders.forEach(fader => { appearOnScroll.observe(fader); });
+    </script>
+
+</body>
+
+</html>
