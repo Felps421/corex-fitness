@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoreXFit AI — Inteligência aplicada ao seu corpo</title>
+  <meta name="description" content="O CoreXFit AI calcula, ajusta e evolui seu treino e dieta automaticamente com Inteligência Artificial." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0f0f0f;
+      --fg: #f2f2f2;
+      --primary: hsl(217, 91%, 60%);
+      --primary-glow: hsl(217, 91%, 60%, 0.25);
+      --accent: hsl(152, 60%, 45%);
+      --muted: #8a8a8a;
+      --card: #141414;
+      --border: #292929;
+      --radius: 0.75rem;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background 0.5s, border-color 0.5s, backdrop-filter 0.5s;
+      border-bottom: 1px solid transparent;
+    }
+    .navbar.scrolled {
+      background: rgba(15, 15, 15, 0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom-color: var(--border);
+    }
+    .navbar-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+    .logo span { color: var(--primary); }
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-block; font-weight: 600; border-radius: var(--radius);
+      transition: all 0.3s; cursor: pointer; border: none; font-family: inherit;
+      position: relative; overflow: hidden;
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: translateX(-100%); transition: transform 0.5s;
+    }
+    .btn:hover::after { transform: translateX(100%); }
+    .btn-primary {
+      background: var(--primary); color: #fff;
+      padding: 0.75rem 1.75rem; font-size: 0.95rem;
+    }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-secondary {
+      background: transparent; color: var(--fg);
+      padding: 0.75rem 1.75rem; font-size: 0.95rem;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--fg); }
+    .btn-outline {
+      background: transparent; color: var(--primary);
+      padding: 0.875rem 1.75rem; font-size: 1rem;
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 0.75rem;
+    }
+    .btn-outline:hover { background: rgba(96, 165, 250, 0.1); border-color: var(--primary); }
+    .btn-large {
+      padding: 1.25rem 2.5rem; font-size: 1.125rem; border-radius: 1rem;
+    }
+    /* Glow animation for CTA */
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(96, 165, 250, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(96, 165, 250, 0.5), 0 0 80px rgba(96, 165, 250, 0.15); }
+    }
+    .btn-glow { animation: glow-pulse 3s ease-in-out infinite; }
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 6rem 1.5rem 4rem; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(135deg, rgba(96,165,250,0.08), rgba(74,222,128,0.04), transparent);
+      background-size: 200% 200%;
+      animation: gradient-shift 8s ease-in-out infinite;
+    }
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .hero-orb {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(96,165,250,0.12), transparent 70%);
+      top: 20%; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 1200px; width: 100%;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 3rem; text-align: center;
+    }
+    .hero-text { max-width: 640px; }
+    .hero h1 {
+      font-size: clamp(2.25rem, 6vw, 4rem); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1.25rem;
+    }
+    .hero h1 .highlight { color: var(--primary); }
+    .hero p { font-size: 1.125rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem; }
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .hero-image-wrapper { position: relative; }
+    .hero-image {
+      width: 280px; border-radius: 1.5rem;
+      box-shadow: 0 25px 80px -20px rgba(96,165,250,0.25), 0 10px 30px -10px rgba(0,0,0,0.5);
+      animation: float 5s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    /* ===== FEATURE SECTIONS ===== */
+    .feature {
+      padding: 6rem 1.5rem;
+    }
+    .feature-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 3rem;
+    }
+    .feature-img img {
+      width: 260px; border-radius: 1rem;
+      box-shadow: 0 25px 80px -20px rgba(96,165,250,0.25), 0 10px 30px -10px rgba(0,0,0,0.5);
+    }
+    .feature-text { text-align: center; max-width: 480px; }
+    .feature-text h2 {
+      font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 700;
+      letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1rem;
+    }
+    .feature-text p { font-size: 1.0625rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+    @media (min-width: 1024px) {
+      .feature { padding: 8rem 1.5rem; }
+      .feature-inner {
+        flex-direction: row; gap: 5rem;
+      }
+      .feature-inner.reversed { flex-direction: row-reverse; }
+      .feature-text { text-align: left; flex: 1; }
+      .feature-img { flex: 1; display: flex; justify-content: center; }
+      .feature-img img { width: 340px; }
+      .hero-image { width: 340px; }
+      .hero-content { flex-direction: row; text-align: left; }
+      .hero-text { text-align: left; }
+      .hero-buttons { justify-content: flex-start; }
+    }
+    /* ===== CTA SECTION ===== */
+    .cta {
+      position: relative; padding: 8rem 1.5rem; overflow: hidden; text-align: center;
+    }
+    .cta-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, var(--bg), rgba(96,165,250,0.12), hsl(0,0%,4%));
+    }
+    .cta-orb {
+      position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(96,165,250,0.1), transparent 70%);
+    }
+    .cta-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+    .cta h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 2rem;
+    }
+    .cta h2 .highlight { color: var(--primary); }
+    /* ===== FOOTER ===== */
+    .footer {
+      border-top: 1px solid var(--border); padding: 3rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      text-align: center;
+    }
+    .footer-logo { font-family: 'Space Grotesk', sans-serif; font-size: 0.875rem; font-weight: 600; color: var(--muted); }
+    .footer-logo span { color: var(--primary); }
+    .footer p { font-size: 0.875rem; color: var(--muted); }
+    @media (min-width: 640px) {
+      .footer-inner { flex-direction: row; justify-content: space-between; }
+    }
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#" class="logo">CoreX<span>Fit</span> AI</a>
+      <a href="https://cocky-corex-fit.base44.app" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Acessar App</a>
+    </div>
+  </nav>
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="reveal">
+          <h1>Inteligência aplicada<br>ao seu <span class="highlight">corpo.</span></h1>
+        </div>
+        <div class="reveal" style="transition-delay:0.15s">
+          <p>O CoreXFit AI calcula, ajusta e evolui seu treino e dieta automaticamente.</p>
+        </div>
+        <div class="reveal hero-buttons" style="transition-delay:0.3s">
+          <a href="https://cocky-corex-fit.base44.app" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Acessar CoreXFit AI</a>
+          <a href="#controle" class="btn btn-secondary">Ver Como Funciona</a>
+        </div>
+      </div>
+      <div class="hero-image-wrapper reveal" style="transition-delay:0.4s">
+        <!-- Substitua pelo caminho real da sua imagem -->
+        <img src="imagens/imagem_hero.jpeg" alt="CoreXFit AI Dashboard" class="hero-image" />
+      </div>
+    </div>
+  </section>
+  <!-- ===== CONTROLE TOTAL ===== -->
+  <section class="feature" id="controle">
+    <div class="feature-inner">
+      <div class="feature-img reveal">
+        <img src="imagens/imagem_resumo_dia.jpeg" alt="Controle de macronutrientes" />
+      </div>
+      <div class="feature-text">
+        <div class="reveal"><h2>Controle absoluto dos seus macros.</h2></div>
+        <div class="reveal" style="transition-delay:0.1s"><p>Acompanhe calorias, proteínas, carboidratos e gorduras em tempo real.</p></div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== EVOLUÇÃO VISÍVEL ===== -->
+  <section class="feature">
+    <div class="feature-inner reversed">
+      <div class="feature-img reveal">
+        <img src="imagens/imagem_progresso_macro.jpeg" alt="Progresso e evolução" />
+      </div>
+      <div class="feature-text">
+        <div class="reveal"><h2>Evolução que você enxerga.</h2></div>
+        <div class="reveal" style="transition-delay:0.1s"><p>Acompanhe seu progresso com gráficos inteligentes que mostram sua evolução semana a semana.</p></div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== IA PERSONALIZADA ===== -->
+  <section class="feature">
+    <div class="feature-inner">
+      <div class="feature-img reveal">
+        <img src="imagens/imagem_plano_ia.jpeg" alt="Plano alimentar com IA" />
+      </div>
+      <div class="feature-text">
+        <div class="reveal"><h2>Sua dieta criada por Inteligência Artificial.</h2></div>
+        <div class="reveal" style="transition-delay:0.1s"><p>Com um clique, o CoreXFit AI gera um plano alimentar totalmente adaptado ao seu objetivo.</p></div>
+        <div class="reveal" style="transition-delay:0.2s">
+          <a href="https://cocky-corex-fit.base44.app" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Gerar com IA</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== TREINO INTELIGENTE ===== -->
+  <section class="feature">
+    <div class="feature-inner reversed">
+      <div class="feature-img reveal">
+        <img src="imagens/imagem_treino.jpeg" alt="Treino inteligente" />
+      </div>
+      <div class="feature-text">
+        <div class="reveal"><h2>Treinos estruturados. Resultados previsíveis.</h2></div>
+        <div class="reveal" style="transition-delay:0.1s"><p>Divisão inteligente, exercícios organizados e acompanhamento automático.</p></div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== MEU PROGRESSO ===== -->
+  <section class="feature">
+    <div class="feature-inner">
+      <div class="feature-img reveal">
+        <img src="imagens/imagem_progresso.jpeg" alt="Acompanhamento de progresso" />
+      </div>
+      <div class="feature-text">
+        <div class="reveal"><h2>Meu Progresso.</h2></div>
+        <div class="reveal" style="transition-delay:0.1s"><p>Você pode adicionar progresso e ver quanto falta para chegar no objetivo desejado.</p></div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== CTA FINAL ===== -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-orb"></div>
+    <div class="cta-content">
+      <div class="reveal"><h2>Seu próximo nível<br><span class="highlight">começa agora.</span></h2></div>
+      <div class="reveal" style="transition-delay:0.2s">
+        <a href="https://cocky-corex-fit.base44.app" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-large btn-glow">Acessar CoreXFit AI</a>
+      </div>
+    </div>
+  </section>
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">CoreX<span>Fit</span> AI</div>
+      <p>&copy; 2025 CoreXFit AI. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    /* --- Navbar scroll effect --- */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+    /* --- Scroll Reveal --- */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
